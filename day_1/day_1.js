@@ -1002,22 +1002,97 @@ const data = [
 ];
 
 const sumOf = (data) => {
+  let numbers = [
+    "blank",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+  ];
   let newNumber = [];
   let sum = 0;
   for (let i = 0; i < data.length; i++) {
     let string = data[i].split("");
-    for (let j = 0; j < string.length; j++) {
+    let j, k, g, h;
+
+    function indexOfFirstSubstringAndIndex(stringsArray, mainString) {
+      let minIndex = mainString.length;
+      let foundIndex = -1;
+      let foundSubstring = "";
+
+      stringsArray.forEach((substring) => {
+        const index = mainString.indexOf(substring);
+        if (index !== -1 && index < minIndex) {
+          minIndex = index;
+          foundIndex = index;
+          foundSubstring = stringsArray.indexOf(substring);
+        }
+      });
+
+      return { index: foundIndex, substring: foundSubstring };
+    }
+
+    const resultFirst = indexOfFirstSubstringAndIndex(numbers, data[i]);
+    // console.log("Index of first substring:", resultFirst.index);
+    // console.log("First substring found:", resultFirst.substring);
+
+    for (j = 0; j < string.length; j++) {
       if (!isNaN(string[j])) {
-        newNumber.push(string[j]);
+        // console.log(string[j]);
+        if (resultFirst.index > j || resultFirst.index == -1) {
+          // console.log(string[j]);
+          newNumber.push(string[j]);
+        }
+        // newNumber.push(string[j]);
+
         break;
       }
     }
-    for (let k = string.length; k >= 0; k--) {
-      if (!isNaN(string[k])) {
-        newNumber.push(string[k]);
+
+    if (resultFirst.index < j) {
+      newNumber.push(resultFirst.substring);
+    }
+
+    function indexOfLastSubstringAndIndex(stringsArray, mainString) {
+      let maxIndex = -1;
+      let foundIndex = -1;
+      let foundSubstring = "";
+
+      stringsArray.forEach((substring) => {
+        const index = mainString.lastIndexOf(substring);
+        if (index !== -1 && index > maxIndex) {
+          maxIndex = index;
+          foundIndex = index;
+          foundSubstring = stringsArray.indexOf(substring);
+        }
+      });
+
+      return { index: foundIndex, substring: foundSubstring };
+    }
+
+    const resultLast = indexOfLastSubstringAndIndex(numbers, data[i]);
+    // console.log("Index of last substring:", resultLast.index);
+    // console.log("Last substring found:", resultLast.substring);
+
+    for (g = string.length; g >= 0; g--) {
+      if (!isNaN(string[g])) {
+        // console.log(string[g]);
+
         break;
       }
     }
+
+    if (resultLast.index > g) {
+      newNumber.push(resultLast.substring);
+    } else if (resultLast.index < g) {
+      newNumber.push(string[g]);
+    }
+
     let newNum = Number(newNumber.join(""));
     sum += newNum;
     newNumber = [];
